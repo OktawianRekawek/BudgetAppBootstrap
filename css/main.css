@@ -1,0 +1,25 @@
+.bg-sea {
+  background-color: #008080;
+}
+
+.bg-steelblue {
+  background-color: #4682B4;
+}
+
+.navbar-brand {
+  font-size: 36px;
+}
+
+.navbar-brand i {
+  font-size: 40px;
+}
+
+@media (max-width: 767px) {
+  .navbar > * {
+    width: 100%;
+  }
+
+  .navbar-brand {
+    text-align: center;
+  }
+}
