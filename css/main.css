@@ -53,3 +53,11 @@ body {
     padding-right: 75px;
   }
 }
+
+#mainmenu {
+  font-size: 18px;
+}
+
+.disabled {
+  cursor: default;
+}
