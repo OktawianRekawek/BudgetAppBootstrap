@@ -67,12 +67,12 @@
     </nav>
   </header>
   <main class="container my-3">
-    <div class="row balance">
+    <div class="row justify-content-center balance">
       <header class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-uppercase text-light py-2">
         <h1 class="h2 mb-0">Przegląd Bilansu</h1>
       </header>
       <div class="w-100"></div>
-      <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
+      <div class="col-md-8 col-lg-6 bg-light mx-auto pt-3 text-center">
         <form>
           <div class="form-group row justify-content-center">
             <label for="period" class="col-sm-3 col-form-label">Okres</label>
@@ -90,16 +90,17 @@
             </div>
           </div>
         </form>
+        <h3 class="text-center">01.05.2020 - 31.05.2020</h3>
       </div>
-      <div class="w-100"></div>
-      <div class="col-md-6 bg-light incomes">
-        <h2 class="text-center">Przychody</h2>
-        <div class="row">
-          <div class="col-6">
-            <h3>Kategoria</h3>
+      <div class="w-100 my-2"></div>
+      <div class="col-md-5 bg-light mx-1 incomes">
+        <h2 class="text-center py-2">Przychody</h2>
+        <div class="row px-4">
+          <div class="col-6 border-bottom mb-3">
+            <h4>Kategoria</h4>
           </div>
-          <div class="col-6 text-right">
-            <h3>Wartość [PLN]</h3>
+          <div class="col-6 text-right border-bottom mb-3">
+            <h4>Wartość [PLN]</h4>
           </div>
           <div class="col-6">
             <p>Wynagrodzenie</p>
@@ -121,14 +122,14 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 bg-light expanses order-2 order-md-1">
-        <h2 class="text-center">Wydatki</h2>
-        <div class="row">
-          <div class="col-6">
-            <h3>Kategoria</h3>
+      <div class="col-md-5 bg-light mx-1 expanses order-2 order-md-1">
+        <h2 class="text-center py-2">Wydatki</h2>
+        <div class="row px-4">
+          <div class="col-6 border-bottom mb-3">
+            <h4>Kategoria</h4>
           </div>
-          <div class="col-6 text-right">
-            <h3>Wartość [PLN]</h3>
+          <div class="col-6 text-right border-bottom mb-3">
+            <h4>Wartość [PLN]</h4>
           </div>
           <div class="col-6">
             <p>Mieszkanie</p>
@@ -156,7 +157,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 bg-light incomes-sum order-1 order-md-2">
+      <div class="col-md-5 bg-light m-1 incomes-sum order-1 order-md-2 border-top">
         <div class="row">
           <div class="col-6">
             <h3>Suma:</h3>
@@ -166,7 +167,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 bg-light expanses-sum order-3">
+      <div class="col-md-5 bg-light m-1 expanses-sum order-3">
         <div class="row">
           <div class="col-6">
             <h3>Suma:</h3>
@@ -176,9 +177,9 @@
           </div>
         </div>
       </div>
-      <div class="col-12 bg-light order-4 text-center">
+      <div class="col-md-8 bg-light order-4 text-center my-3 py-3">
         <h3>Bilans: 900.00</h3>
-        <p>Gratulacje! Świetnie zarządzasz finansami!</p>
+        <p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>
       </div>
       <div class="col-md-6 bg-light incomes-graph order-5">
         <img src="../img/Pie-chart.jpg" alt="" class="img-fluid">
