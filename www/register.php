@@ -35,6 +35,11 @@ if (isset($_POST['email'])) {
 
   $password_hash = password_hash($password, PASSWORD_DEFAULT);
   
+  $_SESSION['fr_name'] = $name;
+  $_SESSION['fr_email'] = $email;
+  $_SESSION['fr_password'] = $password;
+  
+  
   if ($validation_OK)
     echo 'Hej zarejestrowałeś się!';
 }
@@ -92,7 +97,12 @@ if (isset($_POST['email'])) {
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-                <input type="text" class="form-control" id="name" name="name">
+                <input type="text" class="form-control" id="name" name="name" value="<?php
+                if (isset($_SESSION['fr_name'])) {
+                  echo $_SESSION['fr_name'];
+                  unset($_SESSION['fr_name']);
+                }
+                ?>">
               </div>
               <?php
               if (isset($_SESSION['e_name'])) {
@@ -107,7 +117,12 @@ if (isset($_POST['email'])) {
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope-square"></i></span></div>
-                <input type="email" class="form-control" id="email" name="email">
+                <input type="email" class="form-control" id="email" name="email" value="<?php
+                if (isset($_SESSION['fr_email'])) {
+                  echo $_SESSION['fr_email'];
+                  unset($_SESSION['fr_email']);
+                }
+                ?>">
               </div>
               <?php
                 if (isset($_SESSION['e_email'])) {
@@ -122,7 +137,12 @@ if (isset($_POST['email'])) {
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" class="form-control" id="password" name="password" value="<?php
+                if (isset($_SESSION['fr_password'])) {
+                  echo $_SESSION['fr_password'];
+                  unset($_SESSION['fr_password']);
+                }
+                ?>">
               </div>
               <?php
                 if (isset($_SESSION['e_password'])) {
