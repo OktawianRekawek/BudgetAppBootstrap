@@ -39,9 +39,23 @@ if (isset($_POST['email'])) {
   $_SESSION['fr_email'] = $email;
   $_SESSION['fr_password'] = $password;
   
+  require_once 'database.php';
   
-  if ($validation_OK)
+  $emailQuery = $db->prepare('SELECT email FROM users WHERE email = :email');
+  $emailQuery->bindValue(':email', $email, PDO::PARAM_STR);
+  $emailQuery->execute();
+
+  if($emailQuery->rowCount()){
+    $validation_OK=false;
+    $_SESSION['e_email'] = "Istnieje już konto przypisane do tego adresu e-mail";
+  }
+  
+  if ($validation_OK) {
     echo 'Hej zarejestrowałeś się!';
+    //$query = $db->prepare('INSERT INTO users VALUES (NULL, :email)');
+    //$query->bindValue(':email', $email, PDO::PARAM_STR);
+    //$query->execute();
+  }
 }
 
 ?>
