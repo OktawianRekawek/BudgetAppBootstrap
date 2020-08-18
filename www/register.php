@@ -65,16 +65,6 @@
             </div>
           </div>
           <div class="form-group row justify-content-center">
-            <label for="login" class="col-sm-3 col-form-label">Login</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-user"></i></span></div>
-                <input type="text" class="form-control" id="login">
-              </div>
-
-            </div>
-          </div>
-          <div class="form-group row justify-content-center">
             <label for="password" class="col-sm-3 col-form-label">Hasło</label>
             <div class="col-sm-8">
               <div class="input-group">
