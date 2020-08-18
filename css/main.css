@@ -3,6 +3,10 @@ body {
   background-image: url(../img/escheresque_ste.png);
 }
 
+.input-err {
+  color: red;
+}
+
 .bg-sea {
   background-color: #008080;
 }

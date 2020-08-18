@@ -1,3 +1,28 @@
+<?php
+
+session_start();
+
+if (isset($_POST['email'])) {
+  
+  $validation_OK = true;
+  
+  $name = $_POST['name'];
+  if (strlen($name)<3 || strlen($name) > 20) {
+    $validation_OK=false;
+    $_SESSION['e_name']="Nazwa musi posiadać od 3 do 20 znaków!";
+  }
+  
+  if (ctype_alnum($name)==false) {
+    $validation_OK=false;
+    $_SESSION['e_name']="Imię może składać się tylko z liter i cyfr (bez polskich znaków)";
+  }
+  
+  if ($validation_OK)
+    echo 'Hej zarejestrowałeś się!';
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -43,15 +68,21 @@
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-        <form>
+        <form method="post">
           <div class="form-group row justify-content-center">
-            <label for="name" class="col-sm-3 col-form-label">Imię</label>
+            <label for="name" class="col-sm-3 col-form-label">Nazwa</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-                <input type="text" class="form-control" id="name">
+                <input type="text" class="form-control" id="name" name="name">
               </div>
-
+              <?php
+              if (isset($_SESSION['e_name']))
+              {
+                echo '<div class="input-err">'.$_SESSION['e_name'].'</div>';
+                unset($_SESSION['e_name']);
+              }
+              ?>
             </div>
           </div>
           <div class="form-group row justify-content-center">
@@ -59,7 +90,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope-square"></i></span></div>
-                <input type="email" class="form-control" id="email">
+                <input type="email" class="form-control" id="email" name="email">
               </div>
 
             </div>
@@ -69,7 +100,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>
-                <input type="password" class="form-control" id="password">
+                <input type="password" class="form-control" id="password" name="password">
               </div>
 
             </div>
