@@ -14,8 +14,26 @@ if (isset($_POST['email'])) {
   
   if (ctype_alnum($name)==false) {
     $validation_OK=false;
-    $_SESSION['e_name']="Imię może składać się tylko z liter i cyfr (bez polskich znaków)";
+    $_SESSION['e_name']="Nazwa może składać się tylko z liter i cyfr (bez polskich znaków)";
   }
+  
+  $email = $_POST['email'];
+  $emailB = filter_var($email, FILTER_SANITIZE_EMAIL);
+    
+  if((filter_var($emailB,FILTER_VALIDATE_EMAIL)==false) || ($emailB!=$email)) {
+    $validation_OK=false;
+    $_SESSION['e_email']="Podaj poprawny adres e-mail";
+  }
+  
+  $password = $_POST['password'];
+
+  if ((strlen($password)<8)||(strlen($password)>20))
+  {
+    $validation_OK = false;
+    $_SESSION['e_password'] = "Hasło musi posiadać od 8 do 20 znaków";
+  }
+
+  $password_hash = password_hash($password, PASSWORD_DEFAULT);
   
   if ($validation_OK)
     echo 'Hej zarejestrowałeś się!';
@@ -77,8 +95,7 @@ if (isset($_POST['email'])) {
                 <input type="text" class="form-control" id="name" name="name">
               </div>
               <?php
-              if (isset($_SESSION['e_name']))
-              {
+              if (isset($_SESSION['e_name'])) {
                 echo '<div class="input-err">'.$_SESSION['e_name'].'</div>';
                 unset($_SESSION['e_name']);
               }
@@ -92,7 +109,12 @@ if (isset($_POST['email'])) {
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope-square"></i></span></div>
                 <input type="email" class="form-control" id="email" name="email">
               </div>
-
+              <?php
+                if (isset($_SESSION['e_email'])) {
+                  echo '<div class="input-err">'.$_SESSION['e_email'].'</div>';
+                  unset($_SESSION['e_email']);
+                }
+              ?>
             </div>
           </div>
           <div class="form-group row justify-content-center">
@@ -102,7 +124,12 @@ if (isset($_POST['email'])) {
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>
                 <input type="password" class="form-control" id="password" name="password">
               </div>
-
+              <?php
+                if (isset($_SESSION['e_password'])) {
+                  echo '<div class="input-err">'.$_SESSION['e_password'].'</div>';
+                  unset($_SESSION['e_password']);
+                }
+              ?>
             </div>
           </div>
           <button type="submit" class="btn btn-info btn-lg font-weight-bold">Zarejestruj</button>
