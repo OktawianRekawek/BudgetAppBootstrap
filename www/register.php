@@ -56,6 +56,38 @@ if (isset($_POST['email'])) {
     $query->bindValue(':username', $name, PDO::PARAM_STR);
     $query->bindValue(':password', $password_hash, PDO::PARAM_STR);
     $query->execute();
+    
+    $userIdQuery = $db->query("SELECT id FROM users WHERE email='$email'");
+    $userID = $userIdQuery->fetchAll();
+    
+    $newUserID = $userID[0][0];
+    
+    $expensesCategoryQuery = $db->query("SELECT name FROM expenses_category_default");
+    $expensesCategories = $expensesCategoryQuery->fetchAll();
+
+    foreach ($expensesCategories as $expCategory){
+      $query = $db->prepare("INSERT INTO expenses_category_assigned_to_users VALUES (NULL, '$newUserID', :category)");
+      $query->bindValue(':category', $expCategory['name'], PDO::PARAM_STR);
+      $query->execute();
+    }
+
+    $incomesCategoryQuery = $db->query("SELECT name FROM incomes_category_default");
+    $incomesCategories = $incomesCategoryQuery->fetchAll();
+
+    foreach ($incomesCategories as $incCategory){
+      $query = $db->prepare("INSERT INTO incomes_category_assigned_to_users VALUES (NULL, '$newUserID', :category)");
+      $query->bindValue(':category', $incCategory['name'], PDO::PARAM_STR);
+      $query->execute();
+    }
+
+    $paymentMethodsQuery = $db->query("SELECT name FROM payment_methods_default");
+    $paymentMethods = $paymentMethodsQuery->fetchAll();
+
+    foreach ($paymentMethods as $payMethod){
+      $query = $db->prepare("INSERT INTO payment_methods_assigned_to_users VALUES (NULL, '$newUserID', :method)");
+      $query->bindValue(':method', $payMethod['name'], PDO::PARAM_STR);
+      $query->execute();
+    }
   }
 }
 
