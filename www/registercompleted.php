@@ -1,3 +1,29 @@
+<?php
+  session_start();
+
+  if (!isset($_SESSION['registersucceed']))
+  {
+    header('Location: register.php');
+    exit();
+  }
+  else
+  {
+    unset($_SESSION['registersucceed']);
+  }
+
+  //usuwany zmienne pamietanych wpisane wartosci formularza
+  if(isset($_SESSION['fr_name'])) unset($_SESSION['fr_name']);
+  if(isset($_SESSION['fr_email'])) unset($_SESSION['fr_email']);
+  if(isset($_SESSION['fr_password'])) unset($_SESSION['fr_password']);
+
+
+  //Usuwanie błędów rejestracji
+  if(isset($_SESSION['e_name'])) unset($_SESSION['e_name']);
+  if(isset($_SESSION['e_email'])) unset($_SESSION['e_mail']);
+  if(isset($_SESSION['e_password'])) unset($_SESSION['e_password']);
+?>
+
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -30,7 +56,7 @@
       <a href="login.html" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
         <i class="fas fa-sign-in-alt mr-1"></i> Zaloguj się
       </a>
-      <a href="#" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
+      <a href="register.php" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
       </a>
     </nav>
   </header>
@@ -39,57 +65,15 @@
 
     <div class="row registration">
       <header class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-uppercase text-light py-2">
-        <h1 class="h2 mb-0">Rejestracja</h1>
+        <h1 class="h2 mb-0">Rejestracja zakończona</h1>
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-        <form>
-          <div class="form-group row justify-content-center">
-            <label for="name" class="col-sm-3 col-form-label">Imię</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-                <input type="text" class="form-control" id="name">
-              </div>
-
-            </div>
-          </div>
-          <div class="form-group row justify-content-center">
-            <label for="email" class="col-sm-3 col-form-label">E-mail</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-envelope-square"></i></span></div>
-                <input type="email" class="form-control" id="email">
-              </div>
-
-            </div>
-          </div>
-          <div class="form-group row justify-content-center">
-            <label for="login" class="col-sm-3 col-form-label">Login</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-user"></i></span></div>
-                <input type="text" class="form-control" id="login">
-              </div>
-
-            </div>
-          </div>
-          <div class="form-group row justify-content-center">
-            <label for="password" class="col-sm-3 col-form-label">Hasło</label>
-            <div class="col-sm-8">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>
-                <input type="password" class="form-control" id="password">
-              </div>
-
-            </div>
-          </div>
-          <button type="submit" class="btn btn-info btn-lg font-weight-bold">Zarejestruj</button>
-        </form>
+        <p class="font-weight-bold h5">Dziękujemy za rejestrację!</p>
+        <p class="font-weight-bold h5">Możesz się już zalogować na swoje konto!</p>
       </div>
       <div class="w-100"></div>
       <aside class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-light py-2">
-        <p class="font-weight-bold h5">Masz już konto?</p>
         <a href="login.html" class="btn btn-dark mr-md-1 font-weight-bold" role="button">
           Zaloguj się
         </a>
