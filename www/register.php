@@ -51,10 +51,11 @@ if (isset($_POST['email'])) {
   }
   
   if ($validation_OK) {
-    echo 'Hej zarejestrowałeś się!';
-    //$query = $db->prepare('INSERT INTO users VALUES (NULL, :email)');
-    //$query->bindValue(':email', $email, PDO::PARAM_STR);
-    //$query->execute();
+    $query = $db->prepare('INSERT INTO users VALUES (NULL, :username, :password, :email)');
+    $query->bindValue(':email', $email, PDO::PARAM_STR);
+    $query->bindValue(':username', $name, PDO::PARAM_STR);
+    $query->bindValue(':password', $password_hash, PDO::PARAM_STR);
+    $query->execute();
   }
 }
 
