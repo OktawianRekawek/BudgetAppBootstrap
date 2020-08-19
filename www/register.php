@@ -88,6 +88,10 @@ if (isset($_POST['email'])) {
       $query->bindValue(':method', $payMethod['name'], PDO::PARAM_STR);
       $query->execute();
     }
+    
+    $_SESSION['registersucceed']=true;
+    header('Location: registercompleted.php');
+    
   }
 }
 
