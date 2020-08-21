@@ -126,7 +126,7 @@ if (isset($_POST['email'])) {
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark">
       <a href="../index.html" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
-      <a href="login.html" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+      <a href="login.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
         <i class="fas fa-sign-in-alt mr-1"></i> Zaloguj się
       </a>
       <a href="#" class="btn btn-info my-1 font-weight-bold" role="button"> <i class="fas fa-user-plus mr-1"></i> Zarejestruj się
@@ -209,7 +209,7 @@ if (isset($_POST['email'])) {
       <div class="w-100"></div>
       <aside class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-light py-2">
         <p class="font-weight-bold h5">Masz już konto?</p>
-        <a href="login.html" class="btn btn-dark mr-md-1 font-weight-bold" role="button">
+        <a href="login.php" class="btn btn-dark mr-md-1 font-weight-bold" role="button">
           Zaloguj się
         </a>
       </aside>

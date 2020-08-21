@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['logged_id'])) {
+  header("Location: ../index.php");
+  exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -26,7 +37,7 @@
 
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark navbar-expand-xl">
-      <a href="../index.html" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
+      <a href="../index.php" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
         <span class="navbar-toggler-icon"></span>
@@ -58,7 +69,7 @@
 
         </ul>
 
-        <a href="../index.html" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+        <a href="logout.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
           <i class="fas fa-sign-out-alt"></i> Wyloguj się
         </a>
 
@@ -93,7 +104,7 @@
             <a class="nav-link disabled btn btn-dark mr-md-1 my-1 font-weight-bold" href="#"><i class="fas fa-cogs"></i> Ustawenia </a>
           </li>
           <li class="nav-item">
-            <a href="../index.html" class="nav-link btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+            <a href="../index.php" class="nav-link btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
               <i class="fas fa-sign-out-alt"></i> Wyloguj się
             </a>
           </li>
