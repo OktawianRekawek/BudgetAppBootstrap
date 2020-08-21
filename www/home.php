@@ -56,11 +56,11 @@ if (!isset($_SESSION['logged_id'])) {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="addExpanse.html"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
+            <a class="nav-link" href="addExpense.php"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="balance.html"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
+            <a class="nav-link" href="balance.php"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
           </li>
 
           <li class="nav-item">
@@ -93,11 +93,11 @@ if (!isset($_SESSION['logged_id'])) {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link btn btn-danger mr-md-1 my-1 font-weight-bold" href="addExpanse.html"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
+            <a class="nav-link btn btn-danger mr-md-1 my-1 font-weight-bold" href="addExpense.php"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link btn btn-info mr-md-1 my-1 font-weight-bold" href="balance.html"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
+            <a class="nav-link btn btn-info mr-md-1 my-1 font-weight-bold" href="balance.php"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
           </li>
 
           <li class="nav-item">
