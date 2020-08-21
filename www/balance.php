@@ -1,3 +1,29 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['logged_id'])) {
+  header("Location: ../index.php");
+  exit();
+} else {
+  
+  require_once('database.php');
+  
+  $userId = $_SESSION['logged_id'];
+  
+  $expenseCategoriesQuery = $db->query("SELECT name FROM expenses_category_assigned_to_users WHERE user_id = '$userId'");
+  
+  $expenseCategories = $expenseCategoriesQuery->fetchAll();
+  
+  $incomeCategoriesQuery = $db->query("SELECT name FROM incomes_category_assigned_to_users WHERE user_id = '$userId'");
+  
+  $incomeCategories = $incomeCategoriesQuery->fetchAll();
+  
+  
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -102,24 +128,17 @@
           <div class="col-6 text-right border-bottom mb-3">
             <h4>Wartość [PLN]</h4>
           </div>
-          <div class="col-6">
-            <p>Wynagrodzenie</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>2000.00</p>
-          </div>
-          <div class="col-6">
-            <p>Sprzedaż na allegro</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>1000.00</p>
-          </div>
-          <div class="col-6">
-            <p>Inne</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>500.00</p>
-          </div>
+          <?php
+            foreach ($incomeCategories as $incomeCategory) {
+              echo "<div class='col-6'><p>
+              {$incomeCategory['name']}
+              </p>
+                    </div>
+                    <div class='col-6 text-right'>
+                      <p>2000.00</p>
+                    </div>";
+            }
+          ?>
         </div>
       </div>
       <div class="col-md-5 bg-light mx-1 expanses order-2 order-md-1">
@@ -131,30 +150,17 @@
           <div class="col-6 text-right border-bottom mb-3">
             <h4>Wartość [PLN]</h4>
           </div>
-          <div class="col-6">
-            <p>Mieszkanie</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>1000.00</p>
-          </div>
-          <div class="col-6">
-            <p>Jedzenie</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>600.00</p>
-          </div>
-          <div class="col-6">
-            <p>Transport</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>500.00</p>
-          </div>
-          <div class="col-6">
-            <p>Inne</p>
-          </div>
-          <div class="col-6 text-right">
-            <p>500.00</p>
-          </div>
+          <?php
+            foreach ($expenseCategories as $expenseCategory) {
+              echo "<div class='col-6'><p>
+              {$expenseCategory['name']}
+              </p>
+                    </div>
+                    <div class='col-6 text-right'>
+                      <p>2000.00</p>
+                    </div>";
+            }
+          ?>
         </div>
       </div>
       <div class="col-md-5 bg-light m-1 incomes-sum order-1 order-md-2 border-top">
