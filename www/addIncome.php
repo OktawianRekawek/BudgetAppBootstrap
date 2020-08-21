@@ -110,7 +110,9 @@ if (!isset($_SESSION['logged_id'])) {
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
-                <input type="date" class="form-control" id="date">
+                <input type="date" class="form-control" id="date" value="<?php
+                                                                          echo date('Y-m-d');
+                                                                         ?>">
               </div>
 
             </div>
