@@ -37,11 +37,11 @@
         <ul class="navbar-nav mr-auto">
 
           <li class="nav-item">
-            <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Start </a>
+            <a class="nav-link" href="home.php"><i class="fas fa-home"></i> Start </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="addIncome.html"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
+            <a class="nav-link" href="addIncome.php"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
           </li>
 
           <li class="nav-item active">
@@ -49,7 +49,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="balance.html"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
+            <a class="nav-link" href="balance.php"><i class="fas fa-balance-scale"></i> Przeglądaj Bilans </a>
           </li>
 
           <li class="nav-item">
@@ -58,7 +58,7 @@
 
         </ul>
 
-        <a href="../index.html" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+        <a href="logout.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
           <i class="fas fa-sign-out-alt"></i> Wyloguj się
         </a>
 
