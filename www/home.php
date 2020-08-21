@@ -69,7 +69,7 @@ if (!isset($_SESSION['logged_id'])) {
 
         </ul>
 
-        <a href="../index.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+        <a href="logout.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
           <i class="fas fa-sign-out-alt"></i> Wyloguj się
         </a>
 
