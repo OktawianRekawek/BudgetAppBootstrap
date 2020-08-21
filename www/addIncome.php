@@ -15,6 +15,32 @@ if (!isset($_SESSION['logged_id'])) {
   
   $categories = $categoriesQuery->fetchAll();
   
+  if (isset($_POST['amount'])) {
+    
+    $amount = $_POST['amount'];
+    $selectedCategory = $_POST['category'];
+    
+    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+      $correctAmount = str_replace(',','.',$amount);
+    
+    $categoryIdQuery = $db->query("SELECT id FROM incomes_category_assigned_to_users WHERE user_id = '$userId' AND name = '$selectedCategory'");
+      
+    $categoryId = $categoryIdQuery->fetchAll();
+      
+    $addIncomeQuery = $db->prepare('INSERT INTO incomes VALUES (NULL, :userid, :categoryId, :amount, :date, :desc)');
+    $addIncomeQuery->bindValue(':userid', $userId, PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':amount', $correctAmount, PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':categoryId', $categoryId[0][0], PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':desc', $_POST['comment'], PDO::PARAM_STR);
+    $addIncomeQuery->execute();
+      
+    } else {
+      $_SESSION['e_amount'] = "Wpisz prawidłową kwotę!";
+    }
+    
+  }
+  
 }
 
 ?>
@@ -94,27 +120,32 @@ if (!isset($_SESSION['logged_id'])) {
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-        <form>
+        <form method="post">
           <div class="form-group row justify-content-center">
             <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
-                <input type="text" class="form-control" id="amount">
+                <input type="text" class="form-control" id="amount" name="amount">
               </div>
-
             </div>
+            <?php
+            if (isset($_SESSION['e_amount'])) {
+              echo '<div class="input-err">'.$_SESSION['e_amount'].'</div>';
+              unset($_SESSION['e_amount']);
+            }
+          ?>
           </div>
+
           <div class="form-group row justify-content-center">
             <label for="date" class="col-sm-3 col-form-label">Data</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
-                <input type="date" class="form-control" id="date" value="<?php
+                <input type="date" class="form-control" id="date" name="date" value="<?php
                                                                           echo date('Y-m-d');
                                                                          ?>">
               </div>
-
             </div>
           </div>
           <div class="form-group row justify-content-center">
@@ -122,7 +153,7 @@ if (!isset($_SESSION['logged_id'])) {
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <select name="category[]" id="category" class="form-control">
+                <select name="category" id="category" class="form-control">
                   <?php
                   
                     foreach($categories as $category) {
@@ -139,9 +170,8 @@ if (!isset($_SESSION['logged_id'])) {
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-comment"></i></span></div>
-                <textarea class="form-control" id="comment"></textarea>
+                <textarea class="form-control" id="comment" name="comment"></textarea>
               </div>
-
             </div>
           </div>
 
