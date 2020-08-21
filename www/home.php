@@ -52,7 +52,7 @@ if (!isset($_SESSION['logged_id'])) {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="addIncome.html"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
+            <a class="nav-link" href="addIncome.php"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
           </li>
 
           <li class="nav-item">
@@ -89,7 +89,7 @@ if (!isset($_SESSION['logged_id'])) {
 
 
           <li class="nav-item">
-            <a class="nav-link btn btn-success mr-md-1 my-1 font-weight-bold" href="addIncome.html"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
+            <a class="nav-link btn btn-success mr-md-1 my-1 font-weight-bold" href="addIncome.php"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
           </li>
 
           <li class="nav-item">
