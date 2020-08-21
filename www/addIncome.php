@@ -35,6 +35,8 @@ if (!isset($_SESSION['logged_id'])) {
     $addIncomeQuery->bindValue(':desc', $_POST['comment'], PDO::PARAM_STR);
     $addIncomeQuery->execute();
       
+    $_SESSION['incomeAdded'] = "Przychód został dodany!";
+      
     } else {
       $_SESSION['e_amount'] = "Wpisz prawidłową kwotę!";
     }
@@ -100,7 +102,7 @@ if (!isset($_SESSION['logged_id'])) {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link disabled" href="#"><i class="fas fa-cogs"></i> Ustawenia </a>
+            <a class="nav-link disabled" href="#"><i class="fas fa-cogs"></i> Ustawienia </a>
           </li>
 
         </ul>
@@ -120,6 +122,13 @@ if (!isset($_SESSION['logged_id'])) {
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
+        <?php
+         if (isset($_SESSION['incomeAdded'])) {
+              echo '<div class="text-success h2 pb-3">'.$_SESSION['incomeAdded'].'</div>';
+              unset($_SESSION['incomeAdded']);
+            }
+           
+        ?>
         <form method="post">
           <div class="form-group row justify-content-center">
             <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
