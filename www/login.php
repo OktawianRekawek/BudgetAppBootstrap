@@ -1,3 +1,39 @@
+<?php
+
+session_start();
+
+require_once 'database.php';
+
+if (!isset($_SESSION['logged_id'])) {
+  
+  if (isset($_POST['email'])) {
+
+    $email = filter_input(INPUT_POST, 'email');
+    $password = filter_input(INPUT_POST, 'password');
+
+    $userQuery = $db->prepare('SELECT id, password FROM users WHERE email = :email');
+    $userQuery->bindValue(':email', $email, PDO::PARAM_STR);
+    $userQuery->execute();
+
+    $user = $userQuery->fetch();
+
+    if ($user && password_verify($password, $user['password'])) {
+      $_SESSION['logged_id'] = $user['id'];
+      unset($_SESSION['bad_attempt']);
+      header("Location: home.php");
+      exit();
+    } else {
+      $_SESSION['bad_attempt'] = true;
+      $_SESSION['email'] = $email;
+    }
+  }
+} else {
+  header("Location: home.php");
+  exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -43,13 +79,19 @@
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-        <form>
+        <form method="post">
           <div class="form-group row justify-content-center">
-            <label for="login" class="col-sm-3 col-form-label">Login</label>
+            <label for="email" class="col-sm-3 col-form-label">Email</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-user"></i></span></div>
-                <input type="text" class="form-control" id="login">
+                <input type="text" class="form-control" id="email" name="email" value="<?php
+                  if (isset($_SESSION['email']))
+                  {
+                    echo $_SESSION['email'];
+                    unset($_SESSION['email']);
+                  }
+                  ?>">
               </div>
 
             </div>
@@ -59,11 +101,16 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-lock"></i></span></div>
-                <input type="password" class="form-control" id="password">
+                <input type="password" class="form-control" id="password" name="password">
               </div>
-
             </div>
           </div>
+          <?php
+            if (isset($_SESSION['bad_attempt'])) {
+              echo '<p class="input-err">Niepoprawny login lub hasło</p>';
+              unset($_SESSION['bad_attempt']);
+            }
+          ?>
           <button type="submit" class="btn btn-info btn-lg font-weight-bold">Zaloguj</button>
         </form>
       </div>
