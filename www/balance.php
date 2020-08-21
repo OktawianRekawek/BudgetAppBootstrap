@@ -26,7 +26,7 @@
 
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark navbar-expand-xl">
-      <a href="../index.html" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
+      <a href="../index.php" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
         <span class="navbar-toggler-icon"></span>
@@ -37,15 +37,15 @@
         <ul class="navbar-nav mr-auto">
 
           <li class="nav-item">
-            <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Start </a>
+            <a class="nav-link" href="home.php"><i class="fas fa-home"></i> Start </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="addIncome.html"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
+            <a class="nav-link" href="addIncome.php"><i class="fas fa-wallet"></i> Dodaj Przychód </a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="addExpanse.html"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
+            <a class="nav-link" href="addExpanse.php"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
           </li>
 
           <li class="nav-item active">
@@ -58,7 +58,7 @@
 
         </ul>
 
-        <a href="../index.html" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+        <a href="logout.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
           <i class="fas fa-sign-out-alt"></i> Wyloguj się
         </a>
 
@@ -79,7 +79,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <select name="period[]" id="period" class="form-control">
+                <select name="period" id="period" class="form-control">
 
                   <option>Bieżący miesiąc</option>
                   <option>Poprzedni miesiąc</option>
@@ -178,7 +178,7 @@
         </div>
       </div>
       <div class="col-md-8 bg-light order-4 text-center my-3 py-3">
-        <h3>Bilans: 900.00</h3>
+        <h3>Bilans: 900.00 PLN</h3>
         <p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>
       </div>
       <div class="col-md-6 bg-light incomes-graph order-5">
