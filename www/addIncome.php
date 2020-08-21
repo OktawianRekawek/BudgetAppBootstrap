@@ -5,6 +5,16 @@ session_start();
 if (!isset($_SESSION['logged_id'])) {
   header("Location: ../index.php");
   exit();
+} else {
+  
+  require_once('database.php');
+  
+  $userId = $_SESSION['logged_id'];
+  
+  $categoriesQuery = $db->query("SELECT name FROM incomes_category_assigned_to_users WHERE user_id = '$userId'");
+  
+  $categories = $categoriesQuery->fetchAll();
+  
 }
 
 ?>
@@ -111,11 +121,13 @@ if (!isset($_SESSION['logged_id'])) {
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
                 <select name="category[]" id="category" class="form-control">
-
-                  <option>Wynagrodzenie</option>
-                  <option>Odsetki bankowe</option>
-                  <option>Sprzedaż na allegro</option>
-                  <option>Inne</option>
+                  <?php
+                  
+                    foreach($categories as $category) {
+                      echo "<option>{$category['name']}</option>";
+                    }
+                  
+                  ?>
                 </select>
               </div>
             </div>
