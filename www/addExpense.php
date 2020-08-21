@@ -1,3 +1,62 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['logged_id'])) {
+  header("Location: ../index.php");
+  exit();
+} else {
+  
+  require_once('database.php');
+  
+  $userId = $_SESSION['logged_id'];
+  
+  $categoriesQuery = $db->query("SELECT name FROM expenses_category_assigned_to_users WHERE user_id = '$userId'");
+  
+  $categories = $categoriesQuery->fetchAll();
+  
+  $paymentsQuery = $db->query("SELECT name FROM payment_methods_assigned_to_users WHERE user_id = '$userId'");
+  
+  $payments = $paymentsQuery->fetchAll();
+  
+  if (isset($_POST['amount'])) {
+    
+    $amount = $_POST['amount'];
+    $selectedCategory = $_POST['category'];
+    $selectedPayment = $_POST['payment'];
+    
+    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+      $correctAmount = str_replace(',','.',$amount);
+    
+    $categoryIdQuery = $db->query("SELECT id FROM expenses_category_assigned_to_users WHERE user_id = '$userId' AND name = '$selectedCategory'");
+      
+    $categoryId = $categoryIdQuery->fetchAll();
+      
+    $paymentIdQuery = $db->query("SELECT id FROM payment_methods_assigned_to_users WHERE user_id = '$userId' AND name = '$selectedPayment'");
+      
+    $paymentId = $paymentIdQuery->fetchAll();
+      
+    $addExpenseQuery = $db->prepare('INSERT INTO expenses VALUES (NULL, :userid, :categoryId, :paymentId, :amount, :date, :desc)');
+    $addExpenseQuery->bindValue(':userid', $userId, PDO::PARAM_INT);
+    $addExpenseQuery->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+    $addExpenseQuery->bindValue(':amount', $correctAmount, PDO::PARAM_INT);
+    $addExpenseQuery->bindValue(':categoryId', $categoryId[0][0], PDO::PARAM_INT);
+    $addExpenseQuery->bindValue(':paymentId', $paymentId[0][0], PDO::PARAM_INT);
+    $addExpenseQuery->bindValue(':desc', $_POST['comment'], PDO::PARAM_STR);
+    $addExpenseQuery->execute();
+      
+    $_SESSION['expenseAdded'] = "Wydatek został dodany!";
+      
+    } else {
+      $_SESSION['e_amount'] = "Wpisz prawidłową kwotę!";
+    }
+    
+  }
+  
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -26,7 +85,7 @@
 
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark navbar-expand-xl">
-      <a href="../index.html" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
+      <a href="../index.php" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
         <span class="navbar-toggler-icon"></span>
@@ -73,36 +132,54 @@
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-        <form>
+        <?php
+         if (isset($_SESSION['expenseAdded'])) {
+              echo '<div class="text-success h2 pb-3">'.$_SESSION['expenseAdded'].'</div>';
+              unset($_SESSION['expenseAdded']);
+            }
+           
+        ?>
+        <form method="post">
           <div class="form-group row justify-content-center">
             <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
-                <input type="text" class="form-control" id="amount">
+                <input type="text" class="form-control" id="amount" name="amount">
               </div>
-
             </div>
+            <?php
+            if (isset($_SESSION['e_amount'])) {
+              echo '<div class="input-err">'.$_SESSION['e_amount'].'</div>';
+              unset($_SESSION['e_amount']);
+            }
+            ?>
           </div>
           <div class="form-group row justify-content-center">
             <label for="date" class="col-sm-3 col-form-label">Data</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
-                <input type="date" class="form-control" id="date">
+                <input type="date" class="form-control" id="date" name="date" value="<?php
+                                                                          echo date('Y-m-d');
+                                                                         ?>">
               </div>
 
             </div>
           </div>
           <div class="form-group row justify-content-center">
-            <label for="source" class="col-sm-3 col-form-label">Źródło</label>
+            <label for="payment" class="col-sm-3 col-form-label">Płatność</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <select name="source[]" id="source" class="form-control">
-                  <option>Gotówka</option>
-                  <option>Karta Kredytowa</option>
-                  <option>Karta Debetowa</option>
+                <select name="payment" id="payment" class="form-control">
+                  <?php
+                  
+                    foreach($payments as $payment) {
+                      echo "<option>{$payment['name']}</option>";
+                    }
+                  
+                  ?>
                 </select>
               </div>
             </div>
@@ -112,11 +189,14 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <select name="category[]" id="category" class="form-control">
-                  <option>jedzenie</option>
-                  <option>mieszkanie</option>
-                  <option>transport</option>
-                  <option>inne</option>
+                <select name="category" id="category" class="form-control">
+                  <?php
+                  
+                    foreach($categories as $category) {
+                      echo "<option>{$category['name']}</option>";
+                    }
+                  
+                  ?>
                 </select>
               </div>
             </div>
@@ -126,7 +206,7 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-comment"></i></span></div>
-                <textarea class="form-control" id="comment"></textarea>
+                <textarea class="form-control" id="comment" name="comment"></textarea>
               </div>
 
             </div>
