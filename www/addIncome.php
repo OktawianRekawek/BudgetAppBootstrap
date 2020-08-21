@@ -1,3 +1,52 @@
+<?php
+
+session_start();
+
+if (!isset($_SESSION['logged_id'])) {
+  header("Location: ../index.php");
+  exit();
+} else {
+  
+  require_once('database.php');
+  
+  $userId = $_SESSION['logged_id'];
+  
+  $categoriesQuery = $db->query("SELECT name FROM incomes_category_assigned_to_users WHERE user_id = '$userId'");
+  
+  $categories = $categoriesQuery->fetchAll();
+  
+  if (isset($_POST['amount'])) {
+    
+    $amount = $_POST['amount'];
+    $selectedCategory = $_POST['category'];
+    
+    if (preg_match("/^[0-9]+(\,[0-9]{2})?$/", $amount)) {
+      $correctAmount = str_replace(',','.',$amount);
+    
+    $categoryIdQuery = $db->query("SELECT id FROM incomes_category_assigned_to_users WHERE user_id = '$userId' AND name = '$selectedCategory'");
+      
+    $categoryId = $categoryIdQuery->fetchAll();
+      
+    $addIncomeQuery = $db->prepare('INSERT INTO incomes VALUES (NULL, :userid, :categoryId, :amount, :date, :desc)');
+    $addIncomeQuery->bindValue(':userid', $userId, PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':date', $_POST['date'], PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':amount', $correctAmount, PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':categoryId', $categoryId[0][0], PDO::PARAM_INT);
+    $addIncomeQuery->bindValue(':desc', $_POST['comment'], PDO::PARAM_STR);
+    $addIncomeQuery->execute();
+      
+    $_SESSION['incomeAdded'] = "Przychód został dodany!";
+      
+    } else {
+      $_SESSION['e_amount'] = "Wpisz prawidłową kwotę!";
+    }
+    
+  }
+  
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pl">
 
@@ -26,7 +75,7 @@
 
   <header class="container-fluid bg-sea text-light">
     <nav class="container navbar navbar-dark navbar-expand-xl">
-      <a href="../index.html" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
+      <a href="../index.php" class="navbar-brand mr-auto"><i class="fas fa-search-dollar mr-1"></i> MyBudget</a>
 
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainmenu" aria-controls="mainmenu" aria-expanded="false" aria-label="Przełącznik nawigacji">
         <span class="navbar-toggler-icon"></span>
@@ -37,7 +86,7 @@
         <ul class="navbar-nav mr-auto">
 
           <li class="nav-item">
-            <a class="nav-link" href="home.html"><i class="fas fa-home"></i> Start </a>
+            <a class="nav-link" href="home.php"><i class="fas fa-home"></i> Start </a>
           </li>
 
           <li class="nav-item active">
@@ -53,12 +102,12 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link disabled" href="#"><i class="fas fa-cogs"></i> Ustawenia </a>
+            <a class="nav-link disabled" href="#"><i class="fas fa-cogs"></i> Ustawienia </a>
           </li>
 
         </ul>
 
-        <a href="../index.html" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
+        <a href="logout.php" class="btn btn-dark mr-md-1 my-1 font-weight-bold" role="button">
           <i class="fas fa-sign-out-alt"></i> Wyloguj się
         </a>
 
@@ -73,25 +122,39 @@
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
-        <form>
+        <?php
+         if (isset($_SESSION['incomeAdded'])) {
+              echo '<div class="text-success h2 pb-3">'.$_SESSION['incomeAdded'].'</div>';
+              unset($_SESSION['incomeAdded']);
+            }
+           
+        ?>
+        <form method="post">
           <div class="form-group row justify-content-center">
             <label for="amount" class="col-sm-3 col-form-label">Kwota</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-dollar-sign"></i></span></div>
-                <input type="text" class="form-control" id="amount">
+                <input type="text" class="form-control" id="amount" name="amount">
               </div>
-
             </div>
+            <?php
+            if (isset($_SESSION['e_amount'])) {
+              echo '<div class="input-err">'.$_SESSION['e_amount'].'</div>';
+              unset($_SESSION['e_amount']);
+            }
+          ?>
           </div>
+
           <div class="form-group row justify-content-center">
             <label for="date" class="col-sm-3 col-form-label">Data</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
-                <input type="date" class="form-control" id="date">
+                <input type="date" class="form-control" id="date" name="date" value="<?php
+                                                                          echo date('Y-m-d');
+                                                                         ?>">
               </div>
-
             </div>
           </div>
           <div class="form-group row justify-content-center">
@@ -99,12 +162,14 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <select name="category[]" id="category" class="form-control">
-
-                  <option>Wynagrodzenie</option>
-                  <option>Odsetki bankowe</option>
-                  <option>Sprzedaż na allegro</option>
-                  <option>Inne</option>
+                <select name="category" id="category" class="form-control">
+                  <?php
+                  
+                    foreach($categories as $category) {
+                      echo "<option>{$category['name']}</option>";
+                    }
+                  
+                  ?>
                 </select>
               </div>
             </div>
@@ -114,9 +179,8 @@
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="far fa-comment"></i></span></div>
-                <textarea class="form-control" id="comment"></textarea>
+                <textarea class="form-control" id="comment" name="comment"></textarea>
               </div>
-
             </div>
           </div>
 
