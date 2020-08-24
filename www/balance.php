@@ -36,6 +36,8 @@ if (!isset($_SESSION['logged_id'])) {
     $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
   }
   
+  $startDateSQL = date("Y-m-d",$startDate);
+  $endDateSQL = date("Y-m-d",$endDate);
   
   $expenseQuery = $db->query("SELECT c.name, SUM(amount) as amount
                               FROM expenses_category_assigned_to_users as c, expenses as e, users as u
@@ -43,6 +45,7 @@ if (!isset($_SESSION['logged_id'])) {
                               AND c.id = e.expense_category_assigned_to_user_id
                               AND e.user_id = u.id
                               AND c.user_id = u.id
+                              AND e.date_of_expense BETWEEN '$startDateSQL' AND '$endDateSQL'
                               GROUP BY c.name");
   
   $expenses = $expenseQuery->fetchAll();
@@ -53,6 +56,7 @@ if (!isset($_SESSION['logged_id'])) {
                               AND c.id = i.income_category_assigned_to_user_id
                               AND i.user_id = u.id
                               AND c.user_id = u.id
+                              AND i.date_of_income BETWEEN '$startDateSQL' AND '$endDateSQL'
                               GROUP BY c.name");
 
   $incomes = $incomeQuery->fetchAll();
@@ -156,7 +160,7 @@ if (!isset($_SESSION['logged_id'])) {
         </form>
         <h3 class="text-center">
           <?php
-            echo date('d.m.Y',$startDate)." - ".date('d.m.Y',$endDate);
+           echo date('d.m.Y',$startDate)." - ".date('d.m.Y',$endDate);
           ?>
         </h3>
       </div>
