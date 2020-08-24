@@ -11,13 +11,25 @@ if (!isset($_SESSION['logged_id'])) {
   
   $userId = $_SESSION['logged_id'];
   
-  $expenseCategoriesQuery = $db->query("SELECT name FROM expenses_category_assigned_to_users WHERE user_id = '$userId'");
+  $expenseQuery = $db->query("SELECT c.name, SUM(amount) as amount
+                              FROM expenses_category_assigned_to_users as c, expenses as e, users as u
+                              WHERE c.user_id='$userId'
+                              AND c.id = e.expense_category_assigned_to_user_id
+                              AND e.user_id = u.id
+                              AND c.user_id = u.id
+                              GROUP BY c.name");
   
-  $expenseCategories = $expenseCategoriesQuery->fetchAll();
+  $expenses = $expenseQuery->fetchAll();
   
-  $incomeCategoriesQuery = $db->query("SELECT name FROM incomes_category_assigned_to_users WHERE user_id = '$userId'");
-  
-  $incomeCategories = $incomeCategoriesQuery->fetchAll();
+  $incomeQuery = $db->query("SELECT c.name, SUM(amount) as amount
+                              FROM incomes_category_assigned_to_users as c, incomes as i, users as u
+                              WHERE c.user_id='$userId'
+                              AND c.id = i.income_category_assigned_to_user_id
+                              AND i.user_id = u.id
+                              AND c.user_id = u.id
+                              GROUP BY c.name");
+
+  $incomes = $incomeQuery->fetchAll();
   
   
 }
@@ -71,7 +83,7 @@ if (!isset($_SESSION['logged_id'])) {
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" href="addExpanse.php"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
+            <a class="nav-link" href="addExpense.php"><i class="fas fa-shopping-basket"></i> Dodaj Wydatek </a>
           </li>
 
           <li class="nav-item active">
@@ -129,14 +141,16 @@ if (!isset($_SESSION['logged_id'])) {
             <h4>Wartość [PLN]</h4>
           </div>
           <?php
-            foreach ($incomeCategories as $incomeCategory) {
+            $incomesSum = 0;
+            foreach ($incomes as $income) {
               echo "<div class='col-6'><p>
-              {$incomeCategory['name']}
+              {$income['name']}
               </p>
                     </div>
                     <div class='col-6 text-right'>
-                      <p>2000.00</p>
+                      <p>{$income['amount']}</p>
                     </div>";
+              $incomesSum += $income['amount'];
             }
           ?>
         </div>
@@ -151,14 +165,16 @@ if (!isset($_SESSION['logged_id'])) {
             <h4>Wartość [PLN]</h4>
           </div>
           <?php
-            foreach ($expenseCategories as $expenseCategory) {
+            $expenesSum = 0;
+            foreach ($expenses as $expense) {
               echo "<div class='col-6'><p>
-              {$expenseCategory['name']}
+              {$expense['name']}
               </p>
                     </div>
                     <div class='col-6 text-right'>
-                      <p>2000.00</p>
+                      <p>{$expense['amount']}</p>
                     </div>";
+              $expenesSum += $expense['amount'];
             }
           ?>
         </div>
@@ -169,7 +185,9 @@ if (!isset($_SESSION['logged_id'])) {
             <h3>Suma:</h3>
           </div>
           <div class="col-6 text-right">
-            <h3>3500.00</h3>
+            <h3>
+              <?php echo $incomesSum;?>
+            </h3>
           </div>
         </div>
       </div>
@@ -179,13 +197,22 @@ if (!isset($_SESSION['logged_id'])) {
             <h3>Suma:</h3>
           </div>
           <div class="col-6 text-right">
-            <h3>2600.00</h3>
+            <h3>
+              <?php echo $expenesSum;?>
+            </h3>
           </div>
         </div>
       </div>
       <div class="col-md-8 bg-light order-4 text-center my-3 py-3">
-        <h3>Bilans: 900.00 PLN</h3>
-        <p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>
+        <?php
+        $balance = $incomesSum - $expenesSum;
+        echo "<h3>Bilans: {$balance}PLN</h3>";
+        if ($balance > 0) {
+          echo '<p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>';
+        } else {
+          echo '<p class="h4 text-danger">Uważaj! Twoje finanse mają się kiepsko!</p>';
+        }
+        ?>
       </div>
       <div class="col-md-6 bg-light incomes-graph order-5">
         <img src="../img/Pie-chart.jpg" alt="" class="img-fluid">
