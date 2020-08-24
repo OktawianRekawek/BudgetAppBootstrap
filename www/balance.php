@@ -11,6 +11,32 @@ if (!isset($_SESSION['logged_id'])) {
   
   $userId = $_SESSION['logged_id'];
   
+  //$currentDate = now();
+  $selectedPeriod="Bieżący miesiąc";
+  
+  if (isset($_POST['period'])){
+    $selectedPeriod = $_POST['period'];
+    if ($selectedPeriod == "Poprzedni miesiąc") {
+      $startDate = mktime(0,0,0,date('m')-1,1,date('Y')) ;
+      $endDate = mktime(0,0,0,date('m'),0,date('Y')) ;
+    }
+    else if ($selectedPeriod == "Bieżący rok") {
+      $startDate = mktime(0,0,0,1,1,date('Y')) ;
+      $endDate = mktime(0,0,0,12,31,date('Y')) ;
+    }
+    else if ($selectedPeriod == "Niestandardowy") {
+      $startDate = mktime(0,0,0,date('m')-1,1,date('Y')) ;
+      $endDate = mktime(0,0,0,date('m'),0,date('Y')) ;
+    } else {
+    $startDate = mktime(0,0,0,date('m'),1,date('Y')) ;
+    $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
+    }
+  } else {
+    $startDate = mktime(0,0,0,date('m'),1,date('Y')) ;
+    $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
+  }
+  
+  
   $expenseQuery = $db->query("SELECT c.name, SUM(amount) as amount
                               FROM expenses_category_assigned_to_users as c, expenses as e, users as u
                               WHERE c.user_id='$userId'
@@ -111,24 +137,28 @@ if (!isset($_SESSION['logged_id'])) {
       </header>
       <div class="w-100"></div>
       <div class="col-md-8 col-lg-6 bg-light mx-auto pt-3 text-center">
-        <form>
+        <form method="post">
           <div class="form-group row justify-content-center">
             <label for="period" class="col-sm-3 col-form-label">Okres</label>
             <div class="col-sm-8">
               <div class="input-group">
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-list"></i></span></div>
-                <select name="period" id="period" class="form-control">
+                <select name="period" id="period" class="form-control" onchange="submit(this);">
 
-                  <option>Bieżący miesiąc</option>
-                  <option>Poprzedni miesiąc</option>
-                  <option>Bieżący rok</option>
-                  <option>Niestandardowy</option>
+                  <option <?php if ($selectedPeriod=="Bieżący miesiąc" ) echo "selected" ;?>>Bieżący miesiąc</option>
+                  <option <?php if ($selectedPeriod=="Poprzedni miesiąc" ) echo "selected" ;?>>Poprzedni miesiąc</option>
+                  <option <?php if ($selectedPeriod=="Bieżący rok" ) echo "selected" ;?>>Bieżący rok</option>
+                  <option <?php if ($selectedPeriod=="Niestandardowy" ) echo "selected" ;?>>Niestandardowy</option>
                 </select>
               </div>
             </div>
           </div>
         </form>
-        <h3 class="text-center">01.05.2020 - 31.05.2020</h3>
+        <h3 class="text-center">
+          <?php
+            echo date('d.m.Y',$startDate)." - ".date('d.m.Y',$endDate);
+          ?>
+        </h3>
       </div>
       <div class="w-100 my-2"></div>
       <div class="col-md-5 bg-light mx-1 incomes">
