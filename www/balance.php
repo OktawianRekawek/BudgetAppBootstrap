@@ -23,10 +23,6 @@ if (!isset($_SESSION['logged_id'])) {
     else if ($selectedPeriod == "Bieżący rok") {
       $startDate = mktime(0,0,0,1,1,date('Y')) ;
       $endDate = mktime(0,0,0,12,31,date('Y')) ;
-    }
-    else if ($selectedPeriod == "Niestandardowy") {
-      $startDate = mktime(0,0,0,date('m')-1,1,date('Y')) ;
-      $endDate = mktime(0,0,0,date('m'),0,date('Y')) ;
     } else {
     $startDate = mktime(0,0,0,date('m'),1,date('Y')) ;
     $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
@@ -36,8 +32,14 @@ if (!isset($_SESSION['logged_id'])) {
     $endDate = mktime(0,0,0,date('m')+1,0,date('Y')) ;
   }
   
-  $startDateSQL = date("Y-m-d",$startDate);
-  $endDateSQL = date("Y-m-d",$endDate);
+  
+ if ($selectedPeriod == "Niestandardowy" && isset($_POST['date1']) && isset($_POST['date2']) && ($_POST['date1'] <= $_POST['date2'])) {
+    $startDateSQL = $_POST['date1'];
+    $endDateSQL = $_POST['date2'];
+  } else {
+    $startDateSQL = date("Y-m-d",$startDate);
+    $endDateSQL = date("Y-m-d",$endDate);
+  }
   
   $expenseQuery = $db->query("SELECT c.name, SUM(amount) as amount
                               FROM expenses_category_assigned_to_users as c, expenses as e, users as u
@@ -140,7 +142,7 @@ if (!isset($_SESSION['logged_id'])) {
         <h1 class="h2 mb-0">Przegląd Bilansu</h1>
       </header>
       <div class="w-100"></div>
-      <div class="col-md-8 col-lg-6 bg-light mx-auto pt-3 text-center">
+      <div class="col-md-8 col-lg-6 bg-light mx-auto py-3 text-center">
         <form method="post">
           <div class="form-group row justify-content-center">
             <label for="period" class="col-sm-3 col-form-label">Okres</label>
@@ -154,15 +156,42 @@ if (!isset($_SESSION['logged_id'])) {
                   <option <?php if ($selectedPeriod=="Bieżący rok" ) echo "selected" ;?>>Bieżący rok</option>
                   <option <?php if ($selectedPeriod=="Niestandardowy" ) echo "selected" ;?>>Niestandardowy</option>
                 </select>
+
               </div>
             </div>
           </div>
-        </form>
-        <h3 class="text-center">
           <?php
-           echo date('d.m.Y',$startDate)." - ".date('d.m.Y',$endDate);
+          if ($selectedPeriod=="Niestandardowy" ){
+            echo '<div class="form-group row justify-content-center">
+                      <label for="date1" class="col-sm-1 col-form-label">Od</label>
+                      <div class="col-xl-5">
+                        <div class="input-group">
+                          <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+                          <input type="date" class="form-control id="date1" name="date1" value="';
+            if(isset($_POST['date1'])) echo $_POST['date1'];
+            echo '">
+                        </div>
+                      </div>
+                      <label for="date2" class="col-sm-1 col-form-label">Do</label>
+                      <div class="col-xl-5">
+                        <div class="input-group">
+                          <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
+                          <input type="date" class="form-control id="date2" name="date2" value="';
+            if(isset($_POST['date2'])) echo $_POST['date2'];
+            echo '">
+                        </div>
+                      </div>
+                    </div>
+                    <button type="submit" class="btn btn-info btn-lg font-weight-bold">Wyszukaj</button>';
+          }
           ?>
-        </h3>
+        </form>
+        <?php
+          if ($selectedPeriod!="Niestandardowy" ){
+            echo '<h3 class="text-center">'.date('d.m.Y',$startDate).' - '.date('d.m.Y',$endDate).'</h3>';
+          }
+          ?>
+
       </div>
       <div class="w-100 my-2"></div>
       <div class="col-md-5 bg-light mx-1 incomes">
