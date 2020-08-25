@@ -162,6 +162,8 @@ if (!isset($_SESSION['logged_id'])) {
                 <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-calendar"></i></span></div>
                 <input type="date" class="form-control" id="date" name="date" value="<?php
                                                                           echo date('Y-m-d');
+                                                                         ?>" max="<?php
+                                                                          echo date('Y-m-d');
                                                                          ?>">
               </div>
 
