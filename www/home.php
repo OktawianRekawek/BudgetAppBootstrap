@@ -7,6 +7,14 @@ if (!isset($_SESSION['logged_id'])) {
   exit();
 }
 
+require_once('database.php');
+  
+$userId = $_SESSION['logged_id'];
+
+$userNameQuery = $db -> query("SELECT username FROM users WHERE id = '$userId'");
+$userName = $userNameQuery->fetchAll();
+
+
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +89,9 @@ if (!isset($_SESSION['logged_id'])) {
   <main class="container my-3">
     <div class="row baner justify-content-center no-gutters">
       <div class="col-lg-6 mt-3 px-3">
-        <p class="text-uppercase h2">Witaj Użytkowniku!</p>
+        <p class="text-uppercase h2">Witaj
+          <?= $userName[0]['username'];?>!
+        </p>
 
         <p class="my-4 px-3 px-sm-5 slogan">Aplikacja <strong>MyBudget</strong> pomoże Ci kontolować swoje finanse. Co chcesz teraz zrobić?</p>
 

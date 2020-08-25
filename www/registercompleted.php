@@ -74,7 +74,7 @@
       </div>
       <div class="w-100"></div>
       <aside class="col-md-8 col-lg-6 mx-auto bg-sea text-center text-light py-2">
-        <a href="login.html" class="btn btn-dark mr-md-1 font-weight-bold" role="button">
+        <a href="login.php" class="btn btn-dark mr-md-1 font-weight-bold" role="button">
           Zaloguj się
         </a>
       </aside>
