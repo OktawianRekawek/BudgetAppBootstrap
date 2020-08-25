@@ -211,7 +211,7 @@ if (!isset($_SESSION['logged_id'])) {
               </p>
                     </div>
                     <div class='col-6 text-right'>
-                      <p>{$income['amount']}</p>
+                      <p>".number_format($income['amount'], 2, ',', ' ')."</p>
                     </div>";
               $incomesSum += $income['amount'];
             }
@@ -235,7 +235,7 @@ if (!isset($_SESSION['logged_id'])) {
               </p>
                     </div>
                     <div class='col-6 text-right'>
-                      <p>{$expense['amount']}</p>
+                      <p>".number_format($expense['amount'], 2, ',', ' ')."</p>
                     </div>";
               $expenesSum += $expense['amount'];
             }
@@ -249,7 +249,7 @@ if (!isset($_SESSION['logged_id'])) {
           </div>
           <div class="col-6 text-right">
             <h3>
-              <?php echo $incomesSum;?>
+              <?php echo number_format($incomesSum, 2, ',', ' ');?>
             </h3>
           </div>
         </div>
@@ -261,7 +261,7 @@ if (!isset($_SESSION['logged_id'])) {
           </div>
           <div class="col-6 text-right">
             <h3>
-              <?php echo $expenesSum;?>
+              <?php echo number_format($expenesSum, 2, ',', ' ');?>
             </h3>
           </div>
         </div>
@@ -269,7 +269,7 @@ if (!isset($_SESSION['logged_id'])) {
       <div class="col-md-8 bg-light order-4 text-center my-3 py-3">
         <?php
         $balance = $incomesSum - $expenesSum;
-        echo "<h3>Bilans: {$balance}PLN</h3>";
+        echo "<h3>Bilans: ".number_format($balance, 2, ',', ' ')." PLN</h3>";
         if ($balance > 0) {
           echo '<p class="h4 text-success">Gratulacje! Świetnie zarządzasz finansami!</p>';
         } else {
